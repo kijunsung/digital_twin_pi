@@ -13,9 +13,9 @@ class Led:
     def blink(self, count):
         for _ in range(count):
             gpio.output(self.pin,gpio.HIGH)
-            slepp(time)
+            sleep(time)
             gpio.output(self.pin,gpio.LOW)
-            slepp(time)
+            sleep(time)
             
     def ledOn(self):
         gpio.output(self.pin, gpio.HIGH)
@@ -41,13 +41,23 @@ class Button:
     def checkPressed(self, currentState):
         return currentState == gpio.HIGH and self.prevState == gpio.LOW
 
-def open():
-    print("open door")
-    
-def close():
-    print("close door")
 
-buttons = (Button(13, open), Button(19, close))
+leds = (Led(16, "RED"), Led(21, "GREEN"))
+
+def ledResdFuntion():
+    leds[0].blink(10,0.5)
+
+greenLedState = True
+
+def ledGreenFuntion():
+    global greenLedState
+    if greenLedState:
+        leds[1].ledOff()
+    else:
+        leds[1].ledOn()
+    greenLedState = not greenLedState
+
+buttons = (Button(13, ledResdFuntion), Button(19, ledGreenFuntion))
     
 try:
     while True:
